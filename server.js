@@ -71,6 +71,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
+
 // Middleware to verify JWT
 function authMiddleware(req, res, next) {
   const authHeader = req.headers["authorization"];
@@ -160,6 +161,9 @@ app.get("/profile", authMiddleware, async (req, res) => {
 });
 
 const path = require("path");
+// Serve static images folder
+app.use("/images", express.static(path.join(__dirname, "images")));
+
 
 // ... keep everything you already have ...
 
