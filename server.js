@@ -168,17 +168,18 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 
 });
-app.get("/profile", (req, res) => {
-  res.sendFile(path.join(__dirname, "profile.html"));
-});
-
-app.get("/register", (req, res) => {
+app.get("/register.html", (req, res) => {
   res.sendFile(path.join(__dirname, "register.html"));
 });
 
-app.get("/dashboard", (req, res) => {
+app.get("/dashboard.html", (req, res) => {
   res.sendFile(path.join(__dirname, "dashboard.html"));
 });
+
+app.get("/profile.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "profile.html"));
+});
+
 
 
 // Start server
