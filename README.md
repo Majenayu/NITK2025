@@ -1,66 +1,40 @@
-🌱 Carbon Footprint Estimator
+# Plastic AI
 
-AI-powered Image Recognition for Sustainable Choices
+A project under **NITK 2025** focused on analyzing, tracking, and managing plastic waste using AI techniques. This project aims to provide actionable insights and solutions for plastic waste management through intelligent algorithms and automation.
 
-📌 Overview
+---
 
-Carbon Footprint Estimator is an AI-based system that helps users understand the environmental impact of their choices.
-By simply uploading an image, the system:
+## Features
 
-Recognizes the object/activity
+- AI-based detection and classification of plastic items.
+- Data processing and visualization for plastic waste trends.
+- Suggestions for alternative products and disposal tips.
+- Profit and recycling ideas for plastic waste.
+- Scalable and modular code for future AI enhancements.
 
-Estimates the associated carbon emissions
+---
 
-Suggests alternative sustainable options
+## Installation
 
-Highlights potential savings & profit opportunities
+1. **Clone the repository:**
 
-This project aims to make climate-conscious decisions simple, interactive, and impactful.
+```bash
+git clone https://github.com/Majenayu/NITK2025.git
+cd NITK2025/plastic-ai
 
-🚨 Key Features
 
-🖼 Image Recognition – Upload an image of food, product, or transport mode; AI identifies it.
+pip install -r requirements.txt
 
-🌍 Carbon Estimation – Calculates estimated emissions based on trusted global datasets.
 
-🔄 Sustainable Alternatives – Recommends eco-friendly substitutes (e.g., plant-based food, renewable transport).
+python main.py
 
-💰 Profit Turning – Shows cost savings and possible profit from switching to greener options.
 
-📊 Interactive Dashboard – Visualizes carbon impact and suggested improvements.
 
-🛠 Tech Stack
-
-Frontend: React.js / Next.js (for UI & dashboard)
-
-Backend: Node.js / Python (Flask/Django)
-
-AI/ML: TensorFlow / PyTorch for image classification
-
-Database: MongoDB / PostgreSQL
-
-APIs & Datasets: EPA, IPCC, and global carbon footprint datasets
-
-🚀 How It Works
-
-Upload Image → User provides a photo (e.g., burger, plastic bottle, car).
-
-AI Detection → System recognizes the item using trained ML models.
-
-Carbon Calculation → Emissions are estimated based on lifecycle data.
-
-Alternative Suggestions → System proposes eco-friendly alternatives.
-
-Profit/Savings Insights → Displays cost/environmental benefit of switching.
-
-📊 Example
-
-Input: 🖼 Plastic Bottle
-
-Output:
-
-Estimated Emission: 82g CO₂e
-
-Suggested Alternative: Reusable Metal Bottle
-
-Profit Turning: Save $50/year + reduce 30kg CO₂e annually
+plastic-ai/
+│
+├── data/               # Dataset files
+├── models/             # Trained AI models
+├── scripts/            # Scripts for data processing or training
+├── main.py             # Entry point of the project
+├── requirements.txt    # Python dependencies
+└── README.md           # Project documentation
