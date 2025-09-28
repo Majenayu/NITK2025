@@ -1,40 +1,69 @@
-# Plastic AI
+# ♻️ Plastic AI – Waste Classification & Eco Awareness  
 
-A project under **NITK 2025** focused on analyzing, tracking, and managing plastic waste using AI techniques. This project aims to provide actionable insights and solutions for plastic waste management through intelligent algorithms and automation.
-
----
-
-## Features
-
-- AI-based detection and classification of plastic items.
-- Data processing and visualization for plastic waste trends.
-- Suggestions for alternative products and disposal tips.
-- Profit and recycling ideas for plastic waste.
-- Scalable and modular code for future AI enhancements.
+This project is a **full-stack web application** that helps users classify waste items (e.g., plastic bottles, bags, cans), track eco-friendly stats, and learn sustainable disposal methods.  
+It combines a **FastAPI (Python) backend** for AI classification with a **Node.js + Express backend** for authentication, user profiles, and serving the frontend.
 
 ---
 
-## Installation
+## 🚀 Features
+- 📸 **Image Upload & Classification** – Upload waste images and get classification with eco-tips.  
+- 📊 **Dashboard** – Track your eco-score, streaks, carbon savings, and waste redirected.  
+- 🔑 **User Authentication** – Register & login using JWT-based authentication.  
+- 🌍 **Multi-Language Support** – Predictions can return localized disposal tips.  
+- 🗂 **MongoDB Integration** – Store user accounts and eco stats.  
+- 🎨 **Frontend Pages**  
+  - `/` → Login  
+  - `/register.html` → Register  
+  - `/dashboard.html` → Eco Dashboard  
+  - `/profile.html` → Profile  
 
-1. **Clone the repository:**
+---
 
+## 🛠️ Tech Stack
+- **Frontend**: HTML, CSS, JavaScript (served via Express)  
+- **Backend (Node)**: Express.js, MongoDB, JWT Auth  
+- **Backend (Python)**: FastAPI, TensorFlow/Keras (MobileNetV2), Uvicorn  
+- **Database**: MongoDB (Atlas / Render)  
+- **Deployment**: Render  
+
+---
+
+
+NITK2025/
+│── server.js # Node.js backend (auth, profile, serving frontend)
+│── model_server.py # FastAPI backend (image classification)
+│── requirements.txt # Python dependencies
+│── package.json # Node.js dependencies
+│── index.html # Login page
+│── register.html # Registration page
+│── dashboard.html # Dashboard page
+│── profile.html # Profile page
+│── images/ # Static images (eco tips, icons, etc.)
+
+
+
+---
+
+## ⚡ Local Setup
+
+### 1️⃣ Clone Repo
 ```bash
 git clone https://github.com/Majenayu/NITK2025.git
-cd NITK2025/plastic-ai
+cd NITK2025
 
+
+python -m venv venv
+source venv/bin/activate   # (Linux/Mac)
+venv\Scripts\activate      # (Windows)
 
 pip install -r requirements.txt
+uvicorn model_server:app --reload --host 0.0.0.0 --port 8000
 
 
-python main.py
+npm install
+node server.js
 
 
 
-plastic-ai/
-│
-├── data/               # Dataset files
-├── models/             # Trained AI models
-├── scripts/            # Scripts for data processing or training
-├── main.py             # Entry point of the project
-├── requirements.txt    # Python dependencies
-└── README.md           # Project documentation
+
+## 📂 Project Structure
