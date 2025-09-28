@@ -159,6 +159,28 @@ app.get("/profile", authMiddleware, async (req, res) => {
   }
 });
 
+const path = require("path");
+
+// ... keep everything you already have ...
+
+// === Serve frontend (index page) ===
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+
+});
+app.get("/profile", (req, res) => {
+  res.sendFile(path.join(__dirname, "profile.html"));
+});
+
+app.get("/register", (req, res) => {
+  res.sendFile(path.join(__dirname, "register.html"));
+});
+
+app.get("/dashboard", (req, res) => {
+  res.sendFile(path.join(__dirname, "dashboard.html"));
+});
+
+
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Node server running on port ${PORT}`));
