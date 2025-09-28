@@ -151,7 +151,7 @@ image_files = [
     "plastic_bag4.jpg",
     "plastic_bag5.jpg",
     "plastic_bag6.jpg",
-    "plastic_bag7.jpg",
+   
     "plastic_bottle1.jpg",
     "lithium_battery1.jpg",
     "lithium_battery2.jpg",
@@ -168,7 +168,7 @@ image_files = [
     "aerosol_spray6.jpg",
     "aerosol_spray7.jpg",
     "aerosol_spray8.jpg",
-    "aerosol_spray9.jpg",
+    
     "aerosol_spray10.jpg"
 ]
 
@@ -204,6 +204,10 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 
 # FastAPI app
 app = FastAPI()
+@app.get("/")
+async def root():
+    return {"message": "✅ Python model API is running. Use POST /predict"}
+
 
 # Image preprocessing
 def preprocess_image(image):
