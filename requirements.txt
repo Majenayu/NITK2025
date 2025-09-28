@@ -4,3 +4,4 @@ tensorflow
 pillow
 imagehash
 numpy
+python-multipart
