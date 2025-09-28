@@ -67,3 +67,38 @@ node server.js
 
 
 ## 📂 Project Structure
+
+
+
+## 🧭 User Flow – How to Use the App
+
+1. **Register / Login**
+   - Go to 👉 [https://nitk2025-node.onrender.com](https://nitk2025-node.onrender.com)  
+   - First, try to **Register** with your own email.  
+   - ⚡ If registration/login fails, you can use this test account:  
+     - **Email:** `vvce23cseaiml0100@vvce.ac.in`  
+     - **Password:** `q`
+
+2. **Dashboard Features**
+   - 🌗 **Dark / Light Theme Toggle** – switch between light and dark mode.  
+   - 🌍 **Language Switcher** – choose between **Kannada, English, Hindi**.  
+   - 🔊 **Text-to-Speech** – click the speaker icon to listen to disposal tips and eco info in your selected language.  
+
+3. **Upload an Image**
+   - Prepare a sample image of **plastic cover, lithium battery, or aerosol**.  
+   - You can download test images from this Google Drive folder 👉 [Sample Images](https://drive.google.com/drive/folders/1OmELpPXIl-ad3nYH5NaZSyLPs78Ly7pA?usp=sharing).  
+   - On the **Dashboard**, click **Upload Image**, select your file, and submit.
+
+4. **View AI Results**
+   - The backend AI (FastAPI + TensorFlow) will classify your waste item.  
+   - You’ll get:
+     - ✅ **Disposal Tips** (how to dispose responsibly)  
+     - ⚠️ **Environmental Impact** (effects of wrong disposal)  
+     - 🌱 **Alternative Suggestions** (eco-friendly replacements)  
+     - 🎨 **Creative Reuse Ideas** (repurpose ideas + YouTube links)  
+   - Your **eco-stats** (ecoScore, carbon saved, waste redirected) are automatically updated.
+
+---
+
+💡 Tip: Explore all dashboard features (theme toggle, language switch, TTS) to get the best experience!
+
