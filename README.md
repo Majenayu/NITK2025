@@ -1,104 +1,59 @@
-# ♻️ Plastic AI – Waste Classification & Eco Awareness  
+# NITK 2025 Plastic AI
 
-This project is a **full-stack web application** that helps users classify waste items (e.g., plastic bottles, bags, cans), track eco-friendly stats, and learn sustainable disposal methods.  
-It combines a **FastAPI (Python) backend** for AI classification with a **Node.js + Express backend** for authentication, user profiles, and serving the frontend.
+An educational waste-awareness application focused on plastic, aerosol, and lithium-battery disposal. It combines a static browser dashboard and information pages with an Express/MongoDB service and a Python model endpoint for image/AI-assisted classification.
 
----
+## Architecture
 
-## 🚀 Features
-- 📸 **Image Upload & Classification** – Upload waste images and get classification with eco-tips.  
-- 📊 **Dashboard** – Track your eco-score, streaks, carbon savings, and waste redirected.  
-- 🔑 **User Authentication** – Register & login using JWT-based authentication.  
-- 🌍 **Multi-Language Support** – Predictions can return localized disposal tips.  
-- 🗂 **MongoDB Integration** – Store user accounts and eco stats.  
-- 🎨 **Frontend Pages**  
-  - `/` → Login  
-  - `/register.html` → Register  
-  - `/dashboard.html` → Eco Dashboard  
-  - `/profile.html` → Profile  
+```mermaid
+flowchart LR
+  Browser[Dashboard and educational pages] --> Node[server.js Express API]
+  Node --> Mongo[(MongoDB)]
+  Node --> Cloudinary[Cloudinary media]
+  Node --> Auth[JWT/bcrypt]
+  Node --> Model[model_server.py FastAPI/TensorFlow]
+  Model --> Images[uploaded image preprocessing]
+```
 
----
+The HTML pages and image assets provide the education UI. `server.js` handles authentication/data/media services; `model_server.py` exposes the Python inference path.
 
-## 🛠️ Tech Stack
-- **Frontend**: HTML, CSS, JavaScript (served via Express)  
-- **Backend (Node)**: Express.js, MongoDB, JWT Auth  
-- **Backend (Python)**: FastAPI, TensorFlow/Keras (MobileNetV2), Uvicorn  
-- **Database**: MongoDB (Atlas / Render)  
-- **Deployment**: Render  
+## Setup
 
----
-
-
-NITK2025/
-│── server.js # Node.js backend (auth, profile, serving frontend)
-│── model_server.py # FastAPI backend (image classification)
-│── requirements.txt # Python dependencies
-│── package.json # Node.js dependencies
-│── index.html # Login page
-│── register.html # Registration page
-│── dashboard.html # Dashboard page
-│── profile.html # Profile page
-│── images/ # Static images (eco tips, icons, etc.)
-
-
-
----
-
-## ⚡ Local Setup
-
-### 1️⃣ Clone Repo
 ```bash
-git clone https://github.com/Majenayu/NITK2025.git
-cd NITK2025
-
-
-python -m venv venv
-source venv/bin/activate   # (Linux/Mac)
-venv\Scripts\activate      # (Windows)
-
+npm ci
+npm start
+# Python model service in a separate environment
 pip install -r requirements.txt
-uvicorn model_server:app --reload --host 0.0.0.0 --port 8000
+uvicorn model_server:app --host 0.0.0.0 --port 8000
+```
 
+Configure MongoDB, JWT, Cloudinary, Hugging Face/API, and model-service URLs through environment variables. Never put provider credentials in client JavaScript.
 
-npm install
-node server.js
+## Workflow and data
 
+Users browse disposal guidance, authenticate where required, upload or submit images, and receive stored/media-backed results. Node handles user/data operations and delegates model inference to the Python service when configured.
 
+## Deployment
 
+Deploy the Node and Python services separately or behind a private internal network. Use HTTPS, upload limits and content validation, least-privilege media credentials, and explicit retention/deletion controls.
 
-## 📂 Project Structure
+## Testing and limitations
 
+The package manifest has no automated test suite. Test authentication, upload validation, model timeout/error handling, media access control, and factual correctness of disposal guidance. Model predictions are advisory and require validation on representative local waste images.
 
+## Security and operations
 
-## 🧭 User Flow – How to Use the App
+- Keep credentials, database URLs, OAuth tokens, API keys, and signing secrets in environment variables; never commit them.
+- Validate and constrain uploaded files and user input at the server boundary, and enable HTTPS in production.
+- Review dependency updates and rotate any credential that has appeared in repository history.
 
-1. **Register / Login**
-   - Go to 👉 [https://nitk2025-node.onrender.com](https://nitk2025-node.onrender.com)  
-   - First, try to **Register** with your own email.  
-   - ⚡ If registration/login fails, you can use this test account:  
-     - **Email:** `vvce23cseaiml0100@vvce.ac.in`  
-     - **Password:** `q`
+## Testing
 
-2. **Dashboard Features**
-   - 🌗 **Dark / Light Theme Toggle** – switch between light and dark mode.  
-   - 🌍 **Language Switcher** – choose between **Kannada, English, Hindi**.  
-   - 🔊 **Text-to-Speech** – click the speaker icon to listen to disposal tips and eco info in your selected language.  
+The repository currently has no comprehensive automated test suite unless noted above. Before production changes, add tests for authentication/authorization, validation failures, persistence errors, and the primary user workflow.
 
-3. **Upload an Image**
-   - Prepare a sample image of **plastic cover, lithium battery, or aerosol**.  
-   - You can download test images from this Google Drive folder 👉 [Sample Images](https://drive.google.com/drive/folders/1OmELpPXIl-ad3nYH5NaZSyLPs78Ly7pA?usp=sharing).  
-   - On the **Dashboard**, click **Upload Image**, select your file, and submit.
+## Limitations and roadmap
 
-4. **View AI Results**
-   - The backend AI (FastAPI + TensorFlow) will classify your waste item.  
-   - You’ll get:
-     - ✅ **Disposal Tips** (how to dispose responsibly)  
-     - ⚠️ **Environmental Impact** (effects of wrong disposal)  
-     - 🌱 **Alternative Suggestions** (eco-friendly replacements)  
-     - 🎨 **Creative Reuse Ideas** (repurpose ideas + YouTube links)  
-   - Your **eco-stats** (ecoScore, carbon saved, waste redirected) are automatically updated.
+This is an actively evolving project. Production hardening, observability, rate limiting, backup/retention policy, and accessibility/performance validation should be completed before handling sensitive or high-volume workloads.
 
----
+## License
 
-💡 Tip: Explore all dashboard features (theme toggle, language switch, TTS) to get the best experience!
-
+See the repository license file and package metadata for the authoritative terms.
