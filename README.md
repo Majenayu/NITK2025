@@ -1,104 +1,78 @@
-# ♻️ Plastic AI – Waste Classification & Eco Awareness  
+# NITK 2025 Plastic AI
 
-This project is a **full-stack web application** that helps users classify waste items (e.g., plastic bottles, bags, cans), track eco-friendly stats, and learn sustainable disposal methods.  
-It combines a **FastAPI (Python) backend** for AI classification with a **Node.js + Express backend** for authentication, user profiles, and serving the frontend.
+Plastic AI is an educational waste-awareness prototype for identifying common waste categories and explaining disposal choices. A static browser experience presents guidance for plastic, aerosol, and lithium-battery items; a Node/Express service handles accounts and uploads; a separate FastAPI/TensorFlow service performs image inference.
 
----
+## Architecture
 
-## 🚀 Features
-- 📸 **Image Upload & Classification** – Upload waste images and get classification with eco-tips.  
-- 📊 **Dashboard** – Track your eco-score, streaks, carbon savings, and waste redirected.  
-- 🔑 **User Authentication** – Register & login using JWT-based authentication.  
-- 🌍 **Multi-Language Support** – Predictions can return localized disposal tips.  
-- 🗂 **MongoDB Integration** – Store user accounts and eco stats.  
-- 🎨 **Frontend Pages**  
-  - `/` → Login  
-  - `/register.html` → Register  
-  - `/dashboard.html` → Eco Dashboard  
-  - `/profile.html` → Profile  
+```mermaid
+flowchart LR
+  UI[HTML pages and dashboard] --> Node[server.js / Express]
+  Node --> Auth[JWT + bcrypt]
+  Node --> Mongo[(MongoDB / Mongoose)]
+  Node --> Media[Cloudinary]
+  Node -->|POST /predict| Model[model_server.py / FastAPI]
+  Model --> ML[MobileNetV2 classifier]
+```
 
----
+The Node service serves the HTML pages and exposes the account, profile, and upload endpoints. `model_server.py` loads a MobileNetV2-based model and exposes a prediction endpoint. The bundled image assets and educational pages provide category-specific effects, alternatives, disposal tips, and possible reuse ideas.
 
-## 🛠️ Tech Stack
-- **Frontend**: HTML, CSS, JavaScript (served via Express)  
-- **Backend (Node)**: Express.js, MongoDB, JWT Auth  
-- **Backend (Python)**: FastAPI, TensorFlow/Keras (MobileNetV2), Uvicorn  
-- **Database**: MongoDB (Atlas / Render)  
-- **Deployment**: Render  
+## Implemented endpoints
 
----
+Node (`server.js`):
 
+- `POST /register` and `POST /login` create and authenticate users.
+- `POST /upload` accepts an authenticated image upload and forwards it to the model service.
+- `GET /profile` returns the authenticated profile.
+- `/`, `/register.html`, `/dashboard.html`, and `/profile.html` serve the browser UI.
 
-NITK2025/
-│── server.js # Node.js backend (auth, profile, serving frontend)
-│── model_server.py # FastAPI backend (image classification)
-│── requirements.txt # Python dependencies
-│── package.json # Node.js dependencies
-│── index.html # Login page
-│── register.html # Registration page
-│── dashboard.html # Dashboard page
-│── profile.html # Profile page
-│── images/ # Static images (eco tips, icons, etc.)
+Model service (`model_server.py`):
 
+- `GET /` reports service availability.
+- `POST /predict` accepts an image and returns the model/category result.
 
+These routes are implementation details rather than a versioned public API. Review the source before integrating another client.
 
----
+## Local setup
 
-## ⚡ Local Setup
+Requirements: Node.js/npm, Python with the dependencies in `requirements.txt`, MongoDB, and a reachable model-service URL. Cloudinary and JWT settings are required for the corresponding features.
 
-### 1️⃣ Clone Repo
 ```bash
-git clone https://github.com/Majenayu/NITK2025.git
-cd NITK2025
+npm ci
+npm start
 
-
-python -m venv venv
-source venv/bin/activate   # (Linux/Mac)
-venv\Scripts\activate      # (Windows)
-
+# in a second environment/process
+python -m venv .venv
+. .venv/bin/activate
 pip install -r requirements.txt
-uvicorn model_server:app --reload --host 0.0.0.0 --port 8000
+uvicorn model_server:app --host 127.0.0.1 --port 8000
+```
 
+Configure MongoDB, JWT signing, Cloudinary, model-service, and any external API settings through the deployment secret manager. Do not put credentials in HTML, browser JavaScript, or committed configuration. The exact variable names should be taken from `server.js` and the deployment environment.
 
-npm install
-node server.js
+## Project layout
 
+| Path | Responsibility |
+| --- | --- |
+| `server.js` | Express startup, users, auth, uploads, media, model calls |
+| `model_server.py` | FastAPI inference service and image preprocessing |
+| `index.html` | Main educational landing page |
+| `dashboard.html` | Authenticated dashboard and upload flow |
+| `register.html` / `profile.html` | Account screens |
+| `images/` and category JPGs | Educational illustrations and sample assets |
+| `package.json` / `requirements.txt` | Node and Python dependencies |
 
+## Deployment and operations
 
+Deploy the Node and Python processes separately or on a private internal network, and configure the model URL with timeouts and health monitoring. Use HTTPS, least-privilege MongoDB and Cloudinary credentials, upload size/type validation, access-controlled media URLs, and explicit deletion/retention policies.
 
-## 📂 Project Structure
+## Testing and limitations
 
+The package manifest does not declare an automated test suite. Test registration/login failure paths, JWT expiry, upload validation, model timeouts and malformed responses, media access control, and factual accuracy of disposal guidance. Predictions are advisory and should be validated against representative local waste images; this prototype is not a substitute for regulated waste-handling advice.
 
+## Security
 
-## 🧭 User Flow – How to Use the App
+Never commit database URLs, JWT secrets, Cloudinary keys, model-provider tokens, or user data. Rotate any credential exposed in repository history. Treat uploaded images and profile data as sensitive and restrict logs accordingly.
 
-1. **Register / Login**
-   - Go to 👉 [https://nitk2025-node.onrender.com](https://nitk2025-node.onrender.com)  
-   - First, try to **Register** with your own email.  
-   - ⚡ If registration/login fails, you can use this test account:  
-     - **Email:** `vvce23cseaiml0100@vvce.ac.in`  
-     - **Password:** `q`
+## License
 
-2. **Dashboard Features**
-   - 🌗 **Dark / Light Theme Toggle** – switch between light and dark mode.  
-   - 🌍 **Language Switcher** – choose between **Kannada, English, Hindi**.  
-   - 🔊 **Text-to-Speech** – click the speaker icon to listen to disposal tips and eco info in your selected language.  
-
-3. **Upload an Image**
-   - Prepare a sample image of **plastic cover, lithium battery, or aerosol**.  
-   - You can download test images from this Google Drive folder 👉 [Sample Images](https://drive.google.com/drive/folders/1OmELpPXIl-ad3nYH5NaZSyLPs78Ly7pA?usp=sharing).  
-   - On the **Dashboard**, click **Upload Image**, select your file, and submit.
-
-4. **View AI Results**
-   - The backend AI (FastAPI + TensorFlow) will classify your waste item.  
-   - You’ll get:
-     - ✅ **Disposal Tips** (how to dispose responsibly)  
-     - ⚠️ **Environmental Impact** (effects of wrong disposal)  
-     - 🌱 **Alternative Suggestions** (eco-friendly replacements)  
-     - 🎨 **Creative Reuse Ideas** (repurpose ideas + YouTube links)  
-   - Your **eco-stats** (ecoScore, carbon saved, waste redirected) are automatically updated.
-
----
-
-💡 Tip: Explore all dashboard features (theme toggle, language switch, TTS) to get the best experience!
-
+See the repository license file and package metadata for the authoritative terms.
