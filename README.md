@@ -1,58 +1,77 @@
 # NITK 2025 Plastic AI
 
-An educational waste-awareness application focused on plastic, aerosol, and lithium-battery disposal. It combines a static browser dashboard and information pages with an Express/MongoDB service and a Python model endpoint for image/AI-assisted classification.
+Plastic AI is an educational waste-awareness prototype for identifying common waste categories and explaining disposal choices. A static browser experience presents guidance for plastic, aerosol, and lithium-battery items; a Node/Express service handles accounts and uploads; a separate FastAPI/TensorFlow service performs image inference.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-  Browser[Dashboard and educational pages] --> Node[server.js Express API]
-  Node --> Mongo[(MongoDB)]
-  Node --> Cloudinary[Cloudinary media]
-  Node --> Auth[JWT/bcrypt]
-  Node --> Model[model_server.py FastAPI/TensorFlow]
-  Model --> Images[uploaded image preprocessing]
+  UI[HTML pages and dashboard] --> Node[server.js / Express]
+  Node --> Auth[JWT + bcrypt]
+  Node --> Mongo[(MongoDB / Mongoose)]
+  Node --> Media[Cloudinary]
+  Node -->|POST /predict| Model[model_server.py / FastAPI]
+  Model --> ML[MobileNetV2 classifier]
 ```
 
-The HTML pages and image assets provide the education UI. `server.js` handles authentication/data/media services; `model_server.py` exposes the Python inference path.
+The Node service serves the HTML pages and exposes the account, profile, and upload endpoints. `model_server.py` loads a MobileNetV2-based model and exposes a prediction endpoint. The bundled image assets and educational pages provide category-specific effects, alternatives, disposal tips, and possible reuse ideas.
 
-## Setup
+## Implemented endpoints
+
+Node (`server.js`):
+
+- `POST /register` and `POST /login` create and authenticate users.
+- `POST /upload` accepts an authenticated image upload and forwards it to the model service.
+- `GET /profile` returns the authenticated profile.
+- `/`, `/register.html`, `/dashboard.html`, and `/profile.html` serve the browser UI.
+
+Model service (`model_server.py`):
+
+- `GET /` reports service availability.
+- `POST /predict` accepts an image and returns the model/category result.
+
+These routes are implementation details rather than a versioned public API. Review the source before integrating another client.
+
+## Local setup
+
+Requirements: Node.js/npm, Python with the dependencies in `requirements.txt`, MongoDB, and a reachable model-service URL. Cloudinary and JWT settings are required for the corresponding features.
 
 ```bash
 npm ci
 npm start
-# Python model service in a separate environment
+
+# in a second environment/process
+python -m venv .venv
+. .venv/bin/activate
 pip install -r requirements.txt
-uvicorn model_server:app --host 0.0.0.0 --port 8000
+uvicorn model_server:app --host 127.0.0.1 --port 8000
 ```
 
-Configure MongoDB, JWT, Cloudinary, Hugging Face/API, and model-service URLs through environment variables. Never put provider credentials in client JavaScript.
+Configure MongoDB, JWT signing, Cloudinary, model-service, and any external API settings through the deployment secret manager. Do not put credentials in HTML, browser JavaScript, or committed configuration. The exact variable names should be taken from `server.js` and the deployment environment.
 
-## Workflow and data
+## Project layout
 
-Users browse disposal guidance, authenticate where required, upload or submit images, and receive stored/media-backed results. Node handles user/data operations and delegates model inference to the Python service when configured.
+| Path | Responsibility |
+| --- | --- |
+| `server.js` | Express startup, users, auth, uploads, media, model calls |
+| `model_server.py` | FastAPI inference service and image preprocessing |
+| `index.html` | Main educational landing page |
+| `dashboard.html` | Authenticated dashboard and upload flow |
+| `register.html` / `profile.html` | Account screens |
+| `images/` and category JPGs | Educational illustrations and sample assets |
+| `package.json` / `requirements.txt` | Node and Python dependencies |
 
-## Deployment
+## Deployment and operations
 
-Deploy the Node and Python services separately or behind a private internal network. Use HTTPS, upload limits and content validation, least-privilege media credentials, and explicit retention/deletion controls.
+Deploy the Node and Python processes separately or on a private internal network, and configure the model URL with timeouts and health monitoring. Use HTTPS, least-privilege MongoDB and Cloudinary credentials, upload size/type validation, access-controlled media URLs, and explicit deletion/retention policies.
 
 ## Testing and limitations
 
-The package manifest has no automated test suite. Test authentication, upload validation, model timeout/error handling, media access control, and factual correctness of disposal guidance. Model predictions are advisory and require validation on representative local waste images.
+The package manifest does not declare an automated test suite. Test registration/login failure paths, JWT expiry, upload validation, model timeouts and malformed responses, media access control, and factual accuracy of disposal guidance. Predictions are advisory and should be validated against representative local waste images; this prototype is not a substitute for regulated waste-handling advice.
 
-## Security and operations
+## Security
 
-- Keep credentials, database URLs, OAuth tokens, API keys, and signing secrets in environment variables; never commit them.
-- Validate and constrain uploaded files and user input at the server boundary, and enable HTTPS in production.
-- Review dependency updates and rotate any credential that has appeared in repository history.
-
-## Testing
-
-The repository currently has no comprehensive automated test suite unless noted above. Before production changes, add tests for authentication/authorization, validation failures, persistence errors, and the primary user workflow.
-
-## Limitations and roadmap
-
-This is an actively evolving project. Production hardening, observability, rate limiting, backup/retention policy, and accessibility/performance validation should be completed before handling sensitive or high-volume workloads.
+Never commit database URLs, JWT secrets, Cloudinary keys, model-provider tokens, or user data. Rotate any credential exposed in repository history. Treat uploaded images and profile data as sensitive and restrict logs accordingly.
 
 ## License
 
